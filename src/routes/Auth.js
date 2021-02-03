@@ -5,6 +5,7 @@ const Auth = () => {
         const [email, setEmail] = useState("");
         const [password, setPassword] = useState("");
         const [newAccount, setNewAccount] = useState(true);
+        const [error, setError] = useState("");
         const onChange = (event) => {
                 const { target: { name, value } } = event;
                 if (name === 'email') {
@@ -15,20 +16,23 @@ const Auth = () => {
         };
         const onSubmit = async (event) => {
                 event.preventDefault();
+                let data;
                 try {
-                        let data;
                         if (newAccount) {
                                 //create account
-                                data = authService.createUserWithEmailAndPassword(email, password)
+                                data = await authService.createUserWithEmailAndPassword(email, password)
                         } else {
                                 //log in
-                                data = authService.signInWithEmailAndPassword(email, password)
+                                data = await authService.signInWithEmailAndPassword(email, password)
                         }
-                        console.log(data)
                 } catch (error) {
-                        console.log(error)
+                        setError(error.message)
                 }
+
+
+
         };
+        const toggleAccount = () => setNewAccount((prev) => !prev);
 
         return (
                 <div>
@@ -36,7 +40,11 @@ const Auth = () => {
                                 <input name="email" type="text" placeholder="Email" required value={email} onChange={onChange} />
                                 <input name="password" type="password" placeholder="Password" required value={password} onChange={onChange} />
                                 <input type="submit" value={newAccount ? "Create Account" : "Log In"} />
+                                {error}
                         </form>
+                        <span onClick={toggleAccount}>
+                                {newAccount ? "Sign In" : "Create Account"}
+                        </span>
                         <div>
                                 <button>Continue with Google</button>
                                 <button>Continue with Github</button>
