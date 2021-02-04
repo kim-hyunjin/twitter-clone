@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { dbService } from 'myFirebase';
+import Kweet from 'components/Kweet';
 
 const Home = ({ userObj }) => {
         const [kweet, setKweet] = useState("");
@@ -15,7 +16,7 @@ const Home = ({ userObj }) => {
         //         });
         // }
         useEffect(() => {
-                dbService.collection("kweets").onSnapshot(snapshot => { // 리스너
+                dbService.collection("kweets").onSnapshot(snapshot => { // firesotre에 변경사항이 생길때마다 동작할 리스너
                         const kweetArray = snapshot.docs.map(doc => ({
                                 id: doc.id,
                                 ...doc.data()
@@ -42,11 +43,9 @@ const Home = ({ userObj }) => {
                                 <input type="text" placeholder="What's on your mind?" value={kweet} maxLength={120} onChange={onChange} />
                                 <input type="submit" value="Kweet" />
                         </form>
-                        <div>
-                                {kweets.map(kweet => <div key={kweet.id}>
-                                        <h4>{kweet.text}</h4>
-                                </div>)}
-                        </div>
+                        {kweets.map((kweet) => (
+                                <Kweet key={kweet.id} kweetObj={kweet} isOwner={kweet.creatorId === userObj.uid} />
+                        ))}
                 </>
         )
 }
