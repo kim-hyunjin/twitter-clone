@@ -1,4 +1,4 @@
-import { dbService } from 'myFirebase';
+import { dbService, storageService } from 'myFirebase';
 import React, { useState } from 'react';
 
 const Kweet = ({ kweetObj, isOwner }) => {
@@ -8,6 +8,7 @@ const Kweet = ({ kweetObj, isOwner }) => {
                 const ok = window.confirm("Are you sure you want to delete this kweet?");
                 if (ok) {
                         await dbService.doc(`kweets/${kweetObj.id}`).delete();
+                        await storageService.refFromURL(kweetObj.attachmentUrl).delete();
                 }
         };
         const toggleEditing = () => setEditing(prev => !prev);
@@ -36,6 +37,7 @@ const Kweet = ({ kweetObj, isOwner }) => {
                                 </> :
                                 <>
                                         <h4>{kweetObj.text}</h4>
+                                        {kweetObj.attachmentUrl && <img src={kweetObj.attachmentUrl} width="50px" height="50px" />}
                                         {isOwner && (<>
                                                 <button onClick={onDeleteClick}>Delete Kweet</button>
                                                 <button onClick={toggleEditing}>Edit Kweet</button>
