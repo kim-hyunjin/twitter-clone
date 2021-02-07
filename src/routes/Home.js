@@ -26,12 +26,14 @@ const Home = ({ userObj }) => {
         }, [])
         
         return (
-                <>
+                <div className="container">
                         <KweetFactory userObj={userObj} />
-                        {kweets.map((kweet) => (
-                                <Kweet key={kweet.id} kweetObj={kweet} isOwner={kweet.creatorId === userObj.uid} />
-                        ))}
-                </>
+                        <div style={{marginTop: 30}}>
+                                {kweets.map((kweet) => (
+                                        <Kweet key={kweet.id} kweetObj={kweet} isOwner={kweet.creatorId === userObj.uid} />
+                                ))}
+                        </div>
+                </div>
         )
 }
 export default Home

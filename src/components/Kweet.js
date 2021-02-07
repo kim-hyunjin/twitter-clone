@@ -1,5 +1,8 @@
 import { dbService, storageService } from 'myFirebase';
 import React, { useState } from 'react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+
 
 const Kweet = ({ kweetObj, isOwner }) => {
         const [editing, setEditing] = useState(false);
@@ -26,22 +29,33 @@ const Kweet = ({ kweetObj, isOwner }) => {
 
 
         return (
-                <div>
+                <div className="nweet">
                         {editing ?
                                 <>
-                                        <form onSubmit={onSubmit}>
-                                                <input type="text" value={newKweet} required onChange={onChange} />
-                                                <input type="submit" value="Update Kweet" />
+                                        <form onSubmit={onSubmit} className="container nweetEdit">
+                                                <input type="text" 
+                                                        value={newKweet} 
+                                                        required 
+                                                        onChange={onChange} 
+                                                        autoFocus 
+                                                        className="formInput" />
+                                                <input type="submit" value="Update Kweet" className="formBtn" />
                                         </form>
-                                        <button onClick={toggleEditing}>Cancel</button>
+                                        <span onClick={toggleEditing} className="formBtn cancelBtn">Cancel</span>
                                 </> :
                                 <>
                                         <h4>{kweetObj.text}</h4>
-                                        {kweetObj.attachmentUrl && <img src={kweetObj.attachmentUrl} width="50px" height="50px" />}
-                                        {isOwner && (<>
-                                                <button onClick={onDeleteClick}>Delete Kweet</button>
-                                                <button onClick={toggleEditing}>Edit Kweet</button>
-                                        </>)}
+                                        {kweetObj.attachmentUrl && <img src={kweetObj.attachmentUrl} />}
+                                        {isOwner && (
+                                                <div class="nweet__actions">
+                                                <span onClick={onDeleteClick}>
+                                                  <FontAwesomeIcon icon={faTrash} />
+                                                </span>
+                                                <span onClick={toggleEditing}>
+                                                  <FontAwesomeIcon icon={faPencilAlt} />
+                                                </span>
+                                              </div>
+                                        )}
                                 </>
                         }
                 </div>
